@@ -3,7 +3,7 @@ CC = c++ -std=c++98
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 RM = rm -rf
 
-SRC = ScalarConverter.cpp
+SRC = ScalarConverter.cpp main.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
