@@ -23,7 +23,7 @@ int	ScalarConverter::convert_int(string str)
 
 float	ScalarConverter::convert_float(string str)
 {
-	float	ret = atoi(str.c_str());
+	float	ret = static_cast<float>(atof(str.c_str()));
 	return ret;
 }
 
@@ -37,7 +37,7 @@ int	ScalarConverter::get_type(string str)
 {
 	int	type = CHAR;
 
-	for (int i = 0;i < str.length();i++)
+	for (size_t i = 0;i < str.length();i++)
 	{
 		if (type <= INT && str[i] >= '0' && str[i] <= '9')
 			type = INT;
@@ -51,19 +51,23 @@ int	ScalarConverter::get_type(string str)
 
 void	ScalarConverter::convert(string str)
 {
-	int	type = get_type(str);
+	int	type = ScalarConverter::get_type(str);
 	double	x = 0;
 
 	switch (type)
 	{
 		case CHAR:
 			x = static_cast<double>(str[0]);
+			break ;
 		case INT:
 			x = static_cast<double>(convert_int(str));
+			break ;
 		case DOUBLE:
 			x = static_cast<double>(convert_double(str));
+			break ;
 		case FLOAT:
 			x = static_cast<double>(convert_float(str));
+			break ;
 		default:
 			return ;
 
@@ -73,8 +77,26 @@ void	ScalarConverter::convert(string str)
 	float	f = static_cast<float>(x);
 	double	d = static_cast<double>(x);
 
-	std::cout << "char: " << c <<  std::endl;
-	std::cout << "int: " << n <<  std::endl;
 	std::cout << "float: " << f <<  std::endl;
 	std::cout << "double: " << d <<  std::endl;
 }
+
+void	ScalarConverter::Printc(char x, int type) 
+{
+	std::cout << "char: ";
+	if (isprint(x))
+		std::cout << "Not displayable" << std::endl;
+	if (x == -1)
+		std::cout << "impossible" << std::endl;
+	else
+		std::cout << "'" << x << "'" << std::endl;
+}
+
+void	ScalarConverter::Printi(int x, int type) 
+{
+	std::cout << "int: " << n <<  std::endl; //haciendo los printd de cada uno
+}
+
+void	ScalarConverter::Printf(double x, int type) {}
+
+void	ScalarConverter::Printd(float x, int type) {}
