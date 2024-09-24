@@ -24,6 +24,7 @@ int	ScalarConverter::convert_int(string str)
 float	ScalarConverter::convert_float(string str)
 {
 	float	ret = static_cast<float>(atof(str.c_str()));
+	//std::cout << ret << std::endl;
 	return ret;
 }
 
@@ -41,9 +42,9 @@ int	ScalarConverter::get_type(string str)
 	{
 		if (type <= INT && str[i] >= '0' && str[i] <= '9')
 			type = INT;
-		if (type <= DOUBLE && str[i] == '.')
+		if (type <= DOUBLE && (str[i] == '.' || str > "-2147483648"))
 			type = DOUBLE;
-		if (str[i] == 'f')
+		if (str[i] == 'f' && type == DOUBLE)
 			type = FLOAT;
 	}
 	return type;
@@ -72,31 +73,56 @@ void	ScalarConverter::convert(string str)
 			return ;
 
 	}
-	char	c = static_cast<char>(x);
-	int	n = static_cast<int>(x);
-	float	f = static_cast<float>(x);
-	double	d = static_cast<double>(x);
-
-	std::cout << "float: " << f <<  std::endl;
-	std::cout << "double: " << d <<  std::endl;
+	Printc(x, str);
+	Printi(x, str);
+	Printf(x, str);
+	Printd(x, str);
 }
 
-void	ScalarConverter::Printc(char x, int type) 
+void	ScalarConverter::Printc(double x, string str) 
 {
+	char	c;
 	std::cout << "char: ";
-	if (isprint(x))
+	c = static_cast<char>(x);
+	if (str == "nan" || str == "nanf" || x > SCHAR_MAX || x < SCHAR_MIN)
+		std::cout << "impossible" << std::endl;
+	else if (!isprint(x))
 		std::cout << "Not displayable" << std::endl;
-	if (x == -1)
+	else
+		std::cout << "'" << c << "'" << std::endl;
+}
+
+void	ScalarConverter::Printi(double x, string str)
+{
+	//std::cout << x << std::endl;
+	std::cout << "int: ";
+	if (str == "nan" || str == "nanf" || x > (double)INT_MAX || x < (double)INT_MIN)
 		std::cout << "impossible" << std::endl;
 	else
-		std::cout << "'" << x << "'" << std::endl;
+	{
+		int	n = static_cast<int>(x);
+		std::cout << n << std::endl;
+	}
 }
 
-void	ScalarConverter::Printi(int x, int type) 
+void	ScalarConverter::Printd(double x, string str) 
 {
-	std::cout << "int: " << n <<  std::endl; //haciendo los printd de cada uno
+	float	d;
+	std::cout << "double: ";
+	d = static_cast<double>(x);
+	if (str == "nan" || str == "nanf")
+		std::cout << "nan" << std::endl;
+	else
+		std::cout << std::fixed << std::setprecision(1) << std::showpoint << d << std::endl;
 }
 
-void	ScalarConverter::Printf(double x, int type) {}
-
-void	ScalarConverter::Printd(float x, int type) {}
+void	ScalarConverter::Printf(double x, string str) 
+{
+	double	f;
+	std::cout << "float: ";
+	f = static_cast<float>(x);
+	if (str == "nan" || str == "nanf")
+		std::cout << "nanf" << std::endl;
+	else
+		std::cout << std::fixed << std::setprecision(1) << std::showpoint << f << "f" << std::endl;
+}

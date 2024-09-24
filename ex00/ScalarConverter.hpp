@@ -6,6 +6,8 @@
 # define FLOAT	3
 # include <iostream>
 # include <cstdlib>
+# include <iomanip>
+# include <climits>
 
 using std::string;
 
@@ -24,10 +26,10 @@ class ScalarConverter
 		static int	convert_int(string str);
 		static float	convert_float(string str);
 		static double	convert_double(string str);
-		static void	Printc(char x, int type);
-		static void	Printi(int x, int type);
-		static void	Printd(double x, int type);
-		static void	Printf(float x, int type);
+		static void	Printc(double x, string str);
+		static void	Printi(double x, string str);
+		static void	Printd(double x, string str);
+		static void	Printf(double x, string str);
 };
 
 #endif
