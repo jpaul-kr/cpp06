@@ -5,9 +5,11 @@
 # define DOUBLE	2
 # define FLOAT	3
 # include <iostream>
+# include <string>
 # include <cstdlib>
 # include <iomanip>
 # include <climits>
+# include <cfloat>
 
 using std::string;
 
@@ -22,6 +24,7 @@ class ScalarConverter
 		static void		convert(string str);
 
 	private:
+		static bool	isoor(double x, int flag);
 		static int	get_type(string str);
 		static int	convert_int(string str);
 		static float	convert_float(string str);
