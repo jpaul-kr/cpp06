@@ -15,6 +15,20 @@ ScalarConverter&	ScalarConverter::operator=(const ScalarConverter& cpy)
 	return *this;
 }
 
+bool	ScalarConverter::isinf(string str)
+{
+	if (str == "+inf" || str == "+inff" || str == "-inf" || str == "-inff")
+		return true;
+	return false;
+}
+
+bool	ScalarConverter::isnan(string str)
+{
+	if (str == "nan" || str == "nanf")
+		return true;
+	return false;
+}
+
 bool	ScalarConverter::isoor(double x, int flag)
 {
 	switch (flag)
@@ -28,7 +42,7 @@ bool	ScalarConverter::isoor(double x, int flag)
 				return true;
 			break ;
 		case FLOAT:
-			if (x > FLT_MAX || x < FLT_MIN)
+			if (x > FLT_MAX || x < -(FLT_MAX + 1))
 				return true;
 			break;
 		default:
@@ -58,18 +72,27 @@ double	ScalarConverter::convert_double(string str)
 
 int	ScalarConverter::get_type(string str)
 {
-	int	type = CHAR;
-	size_t	flag = str.find("f");
+	int	type;
+	int	flag = str.find("f");
 
-	str[flag] = '\0';
+	if (!isdigit(str[0]) && !str[1])
+		return CHAR;
+	else
+		type = INT;
+	if (flag > 0)
+		str[flag] = '\0';
 	for (size_t i = 0;i < str.length();i++)
 	{
+		if (!i && str[i] == '-')
+			i++;
 		if (type < INT && str[i] >= '0' && str[i] <= '9')
 			type = INT;
 		if (type < DOUBLE && (str[i] == '.' || isoor(atof(str.c_str()), INT)))
 			type = DOUBLE;
-		if (flag && type == DOUBLE && str.find(".") + 1 < 8 && !isoor(atof(str.c_str()), FLOAT))
+		if (flag > 0 && type == DOUBLE && str.find(".") + 1 < 8 && !isoor(atof(str.c_str()), FLOAT))
 			type = FLOAT;
+		if (!isdigit(str[i]) && (str[i] != '.' || !isdigit(str[i + 1])))
+			return ERR;
 	}
 	return type;
 }
@@ -93,22 +116,25 @@ void	ScalarConverter::convert(string str)
 		case FLOAT:
 			x = static_cast<double>(convert_float(str));
 			break ;
+		case ERR:
+			x = 0;
+			break ;
 		default:
 			return ;
 
 	}
-	Printc(x, str);
-	Printi(x, str);
-	Printf(x, str);
-	Printd(x, str);
+	Printc(x, str, type);
+	Printi(x, str, type);
+	Printf(x, str, type);
+	Printd(x, str, type);
 }
 
-void	ScalarConverter::Printc(double x, string str) 
+void	ScalarConverter::Printc(double x, string str, int type) 
 {
 	char	c;
 	std::cout << "char: ";
 	c = static_cast<char>(x);
-	if (str == "nan" || str == "nanf" || isoor(x, CHAR) || str == "+inf" || str == "-inf")
+	if (isinf(str) || isnan(str) || isoor(x, CHAR) || type == ERR)
 		std::cout << "impossible" << std::endl;
 	else if (!isprint(x))
 		std::cout << "Not displayable" << std::endl;
@@ -116,11 +142,10 @@ void	ScalarConverter::Printc(double x, string str)
 		std::cout << "'" << c << "'" << std::endl;
 }
 
-void	ScalarConverter::Printi(double x, string str)
+void	ScalarConverter::Printi(double x, string str, int type)
 {
-	//std::cout << x << std::endl;
 	std::cout << "int: ";
-	if (str == "nan" || str == "nanf" || isoor(x, INT) || str == "+inf" || str == "-inf")
+	if (isnan(str) || isoor(x, INT) || isinf(str) || type == ERR)
 		std::cout << "impossible" << std::endl;
 	else
 	{
@@ -129,29 +154,31 @@ void	ScalarConverter::Printi(double x, string str)
 	}
 }
 
-void	ScalarConverter::Printd(double x, string str) 
+void	ScalarConverter::Printd(double x, string str, int type) 
 {
 	double	d;
 	std::cout << "double: ";
 	d = static_cast<double>(x);
-	if (str == "nan" || str == "nanf")
+	if (type == ERR)
+		std::cout << "impossible" << std::endl;
+	else if (isnan(str))
 		std::cout << "nan" << std::endl;
-	else if (str == "+inf" || str == "+inff" || str == "-inf" || str == "-inff")
+	else if (isinf(str))
 		std::cout << str[0] << "inf" << std::endl;
 	else
 		std::cout << std::fixed << std::setprecision(1) << std::showpoint << d << std::endl;
 }
 
-void	ScalarConverter::Printf(double x, string str) 
+void	ScalarConverter::Printf(double x, string str, int type) 
 {
 	float	f;
 	std::cout << "float: ";
 	f = static_cast<float>(x);
-	if (isoor(x, FLOAT))
+	if (isoor(x, FLOAT) || type == ERR)
 		std::cout << "impossible" << std::endl;
-	else if (str == "+inf" || str == "+inff" || str == "-inf" || str == "-inff")
+	else if (isinf(str))
 		std::cout << str[0] << "inff" << std::endl;
-	else if (str == "nan" || str == "nanf")
+	else if (isnan(str))
 		std::cout << "nanf" << std::endl;
 	else
 		std::cout << std::fixed << std::setprecision(1) << std::showpoint << f << "f" << std::endl;
