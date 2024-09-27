@@ -81,7 +81,7 @@ int	ScalarConverter::get_type(string str)
 		type = INT;
 	if (flag > 0)
 		str[flag] = '\0';
-	for (size_t i = 0;i < str.length();i++)
+	for (size_t i = 0; str[i]; i++)
 	{
 		if (!i && str[i] == '-')
 			i++;
@@ -91,7 +91,7 @@ int	ScalarConverter::get_type(string str)
 			type = DOUBLE;
 		if (flag > 0 && type == DOUBLE && str.find(".") + 1 < 8 && !isoor(atof(str.c_str()), FLOAT))
 			type = FLOAT;
-		if (!isdigit(str[i]) && (str[i] != '.' || !isdigit(str[i + 1])))
+		if (((size_t)flag != str.length() - 1 && flag > 0) || (!isdigit(str[i]) && (str[i] != '.' || !isdigit(str[i + 1]) || !isdigit(str[i - 1]) || i == 0)))
 			return ERR;
 	}
 	return type;
