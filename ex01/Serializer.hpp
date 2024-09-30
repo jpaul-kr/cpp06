@@ -2,10 +2,14 @@
 # define SERIALIZER_HPP
 # include <iostream>
 # include <string>
+# include <stdint.h>
+
+using std::string;
 
 typedef struct s_Data
 {
 	string	content;
+	float	f;
 }Data;
 
 class Serializer
