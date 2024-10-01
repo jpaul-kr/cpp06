@@ -1,9 +1,9 @@
-NAME = serialize
+NAME = identify
 CC = c++ -std=c++98
 CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 RM = rm -rf
 
-SRC = main.cpp
+SRC = main.cpp Base.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
