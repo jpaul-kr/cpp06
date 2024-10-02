@@ -159,12 +159,12 @@ void	ScalarConverter::Printd(double x, string str, int type)
 	double	d;
 	std::cout << "double: ";
 	d = static_cast<double>(x);
-	if (type == ERR)
-		std::cout << "impossible" << std::endl;
-	else if (isnan(str))
+	if (isnan(str))
 		std::cout << "nan" << std::endl;
 	else if (isinf(str))
 		std::cout << str[0] << "inf" << std::endl;
+	else if (type == ERR)
+		std::cout << "impossible" << std::endl;
 	else
 		std::cout << std::fixed << std::setprecision(1) << std::showpoint << d << std::endl;
 }
@@ -174,12 +174,12 @@ void	ScalarConverter::Printf(double x, string str, int type)
 	float	f;
 	std::cout << "float: ";
 	f = static_cast<float>(x);
-	if (isoor(x, FLOAT) || type == ERR)
-		std::cout << "impossible" << std::endl;
-	else if (isinf(str))
+	if (isinf(str))
 		std::cout << str[0] << "inff" << std::endl;
 	else if (isnan(str))
 		std::cout << "nanf" << std::endl;
+	else if (isoor(x, FLOAT) || type == ERR)
+		std::cout << "impossible" << std::endl;
 	else
 		std::cout << std::fixed << std::setprecision(1) << std::showpoint << f << "f" << std::endl;
 }

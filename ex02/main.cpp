@@ -13,7 +13,9 @@ int main()
 	//identify(base2);
 	//identify(base3);
 
-	//identify(*base1);
+	std::cout << std::endl;
+
+	identify(*base1);
 	//identify(*base2);
 	//identify(*base3);
 
