@@ -74,6 +74,7 @@ int	ScalarConverter::get_type(string str)
 {
 	int	type;
 	int	flag = str.find("f");
+	int	pointf = str.find(".");
 
 	if (!isdigit(str[0]) && !str[1])
 		return CHAR;
@@ -91,7 +92,7 @@ int	ScalarConverter::get_type(string str)
 			type = DOUBLE;
 		if (flag > 0 && type == DOUBLE && str.find(".") + 1 < 8 && !isoor(atof(str.c_str()), FLOAT))
 			type = FLOAT;
-		if (((size_t)flag != str.length() - 1 && flag > 0) || (!isdigit(str[i]) && (str[i] != '.' || !isdigit(str[i + 1]) || !isdigit(str[i - 1]) || i == 0)))
+		if (((size_t)flag != str.length() - 1 && flag > 0) || (!isdigit(str[i]) && (str[i] != '.' || !isdigit(str[i + 1]) || !isdigit(str[i - 1]) || i == 0 || (int)i != pointf)))
 			return ERR;
 	}
 	return type;

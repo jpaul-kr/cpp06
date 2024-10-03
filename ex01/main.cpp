@@ -4,6 +4,7 @@ int	main()
 {
 	Data		aux;
 	Data*		data;
+	//Serializer	s;
 	uintptr_t	num;
 
 	aux.content = "hello";
